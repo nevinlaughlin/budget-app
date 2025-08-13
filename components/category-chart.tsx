@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+//icons
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
 
 interface Expense {
@@ -16,17 +17,37 @@ interface CategoryChartProps {
 }
 
 const categoryLabels = {
-  food: "Food & Dining",
-  transport: "Transportation",
+  food: "Grocery",
+  dining: "Dining",
+  gas: "Gas",
   shopping: "Shopping",
   bills: "Bills & Utilities",
   entertainment: "Entertainment",
   coffee: "Coffee & Drinks",
   health: "Health & Fitness",
   education: "Education",
+  subscriptions: "Subscriptions",
+  home: "Home Maintenance"
 }
 
-const COLORS = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444", "#ec4899", "#84cc16"]
+const COLORS = ["#e3f2fd","#bbdefb","#90caf9","#64b5f6","#42a5f5","#2196f3","#1e88e5","#1976d2","#1565c0","#0d47a1"]
+
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+        {payload.map((entry, index) => (
+          <p key={`item-${index}`} style={{ color: entry.color }}>
+            {`${entry.name}`} <strong className="text-bold">{`$${entry.value.toFixed(2)}`}</strong>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+
 
 export function CategoryChart({ expenses }: CategoryChartProps) {
   const categoryTotals = expenses.reduce(
@@ -71,12 +92,13 @@ export function CategoryChart({ expenses }: CategoryChartProps) {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip
-              formatter={(value: number) => [`$${value.toFixed(2)}`, "Amount"]}
+            <Tooltip content={<CustomTooltip />} />
+            {/* <Tooltip
+              formatter={(value: number, label: string) => [`$${value.toFixed(2)}`, `${label}`]}
               labelStyle={{ fontFamily: "var(--font-open-sans)" }}
               contentStyle={{ fontFamily: "var(--font-open-sans)" }}
-            />
-            <Legend wrapperStyle={{ fontFamily: "var(--font-open-sans)", fontSize: "14px" }} />
+            /> */}
+            {/* <Legend wrapperStyle={{ fontFamily: "var(--font-open-sans)", fontSize: "14px" }} /> */}
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

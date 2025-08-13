@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap } from "lucide-react"
+//icons
+import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard } from "lucide-react"
 
 interface Expense {
   id: string
@@ -19,24 +20,30 @@ interface ExpenseListProps {
 
 const categoryIcons = {
   food: Utensils,
-  transport: Car,
+  dining: HandPlatter,
+  gas: Car,
   shopping: ShoppingCart,
   bills: Home,
-  entertainment: Gamepad2,
+  entertainment: Clapperboard,
   coffee: Coffee,
   health: Heart,
   education: GraduationCap,
+  subscriptions: DollarSign,
+  home: PaintBucket
 }
 
 const categoryLabels = {
-  food: "Food & Dining",
-  transport: "Transportation",
+  food: "Grocery",
+  dining: "Dining",
+  gas: "Gas",
   shopping: "Shopping",
   bills: "Bills & Utilities",
   entertainment: "Entertainment",
   coffee: "Coffee & Drinks",
   health: "Health & Fitness",
   education: "Education",
+  subscriptions: "Subscriptions",
+  home: "Home Maintenance"
 }
 
 export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
@@ -75,7 +82,7 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
                     <Icon className="h-4 w-4 text-indigo-500" />
                   </div>
                   <div>
-                    <div className="font-sans font-medium text-gray-900">{categoryLabel}</div>
+                    <div className="font-sans font-medium text-gray-900">{categoryLabel}, {expense.category}</div>
                     {expense.description && (
                       <div className="text-sm text-gray-600 font-sans">{expense.description}</div>
                     )}

@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap } from "lucide-react"
+// icons
+import { ShoppingCart, Car, Home, Utensils, Coffee, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard } from "lucide-react"
 
 interface ExpenseFormProps {
   onSubmit: (expense: { amount: number; category: string; description: string; date: string }) => void
@@ -16,14 +17,17 @@ interface ExpenseFormProps {
 }
 
 const categories = [
-  { value: "food", label: "Food & Dining", icon: Utensils },
-  { value: "transport", label: "Transportation", icon: Car },
+  { value: "food", label: "Grocery", icon: Utensils },
+  { value: "dining", label: "Dining", icon: HandPlatter },
+  { value: "gas", label: "Gas", icon: Car },
   { value: "shopping", label: "Shopping", icon: ShoppingCart },
   { value: "bills", label: "Bills & Utilities", icon: Home },
-  { value: "entertainment", label: "Entertainment", icon: Gamepad2 },
+  { value: "entertainment", label: "Entertainment", icon: Clapperboard },
   { value: "coffee", label: "Coffee & Drinks", icon: Coffee },
   { value: "health", label: "Health & Fitness", icon: Heart },
   { value: "education", label: "Education", icon: GraduationCap },
+  { value: "subscriptions", label: "Subscriptions", icon: DollarSign },
+  { value: "home", label: "Home Maintenance", icon: PaintBucket}
 ]
 
 export function ExpenseForm({ onSubmit, onCancel }: ExpenseFormProps) {
@@ -112,7 +116,7 @@ export function ExpenseForm({ onSubmit, onCancel }: ExpenseFormProps) {
       </div>
 
       <div className="flex gap-2 pt-2">
-        <Button type="submit" className="flex-1 bg-indigo-500 hover:bg-indigo-600 font-sans font-medium">
+        <Button type="submit" className="flex-1 bg-blue-700 hover:bg-blue-600 font-sans font-medium">
           Add Expense
         </Button>
         <Button type="button" variant="outline" onClick={onCancel} className="font-sans font-medium bg-transparent">
