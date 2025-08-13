@@ -90,7 +90,7 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="font-heading font-bold text-lg text-gray-900">${expense.amount.toFixed(2)}</div>
+                  <div className="font-heading font-bold text-lg text-gray-900">${expense.amount.toLocaleString("en-US")}</div>
                   <Button
                     variant="ghost"
                     size="sm"

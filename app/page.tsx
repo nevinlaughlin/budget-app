@@ -67,6 +67,9 @@ export default function BudgetApp() {
     })
     .reduce((sum, expense) => sum + expense.amount, 0)
 
+    const remainingIncome = totalIncome - thisMonthExpenses
+
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -88,24 +91,14 @@ export default function BudgetApp() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white border-0 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-sans font-medium text-gray-600">Total Income</CardTitle>
-              <DollarSign className="h-4 w-4 text-indigo-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${totalIncome.toLocaleString("en-US")}</div>
-            </CardContent>
-          </Card>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Total Expenses</CardTitle>
               <DollarSign className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${totalExpenses.toFixed(2)}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">${totalExpenses.toLocaleString("en-US")}</div>
             </CardContent>
           </Card>
 
@@ -115,7 +108,7 @@ export default function BudgetApp() {
               <TrendingUp className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${thisMonthExpenses.toFixed(2)}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">${thisMonthExpenses.toLocaleString("en-US")}</div>
             </CardContent>
           </Card>
 
@@ -126,6 +119,37 @@ export default function BudgetApp() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-heading font-black text-gray-900">{expenses.length}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="bg-white border-0 shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-sans font-medium text-gray-600">Monthly Income</CardTitle>
+              <DollarSign className="h-4 w-4 text-indigo-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-heading font-black text-gray-900">${totalIncome.toLocaleString("en-US")}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-0 shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-sans font-medium text-gray-600">Remaining Income</CardTitle>
+              <TrendingUp className="h-4 w-4 text-indigo-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-heading font-black text-gray-900">${remainingIncome.toLocaleString("en-US")}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-0 shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-sans font-medium text-gray-600"></CardTitle>
+              <TrendingDown className="h-4 w-4 text-indigo-500" />
+            </CardHeader>
+            <CardContent>
             </CardContent>
           </Card>
         </div>
