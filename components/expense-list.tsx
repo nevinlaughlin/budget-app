@@ -82,7 +82,7 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
                     <Icon className="h-4 w-4 text-indigo-500" />
                   </div>
                   <div>
-                    <div className="font-sans font-medium text-gray-900">{categoryLabel}, {expense.category}</div>
+                    <div className="font-sans font-medium text-gray-900">{categoryLabel}</div>
                     {expense.description && (
                       <div className="text-sm text-gray-600 font-sans">{expense.description}</div>
                     )}
