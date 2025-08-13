@@ -58,7 +58,7 @@ export default function BudgetApp() {
 
   const totalIncome = (3613.38 * 2) + (1579 * 2)
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
-  
+
   const thisMonthExpenses = expenses
     .filter((expense) => {
       const expenseDate = new Date(expense.date)
@@ -95,7 +95,7 @@ export default function BudgetApp() {
               <DollarSign className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${totalIncome.toFixed(2)}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">${totalIncome.toLocaleString("en-US")}</div>
             </CardContent>
           </Card>
 
