@@ -27,7 +27,9 @@ const categoryLabels = {
   health: "Health & Fitness",
   education: "Education",
   subscriptions: "Subscriptions",
-  home: "Home Maintenance"
+  home: "Home Maintenance",
+  tithe: "Tithe"
+
 }
 
 const COLORS = ["#e3f2fd","#bbdefb","#90caf9","#64b5f6","#42a5f5","#2196f3","#1e88e5","#1976d2","#1565c0","#0d47a1"]

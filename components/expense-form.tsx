@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 // icons
-import { ShoppingCart, Car, Home, Utensils, Coffee, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard } from "lucide-react"
+import { ShoppingCart, Car, Home, Utensils, Coffee, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard, HeartHandshake } from "lucide-react"
 
 interface ExpenseFormProps {
   onSubmit: (expense: { amount: number; category: string; description: string; date: string }) => void
@@ -27,7 +27,9 @@ const categories = [
   { value: "health", label: "Health & Fitness", icon: Heart },
   { value: "education", label: "Education", icon: GraduationCap },
   { value: "subscriptions", label: "Subscriptions", icon: DollarSign },
-  { value: "home", label: "Home Maintenance", icon: PaintBucket}
+  { value: "home", label: "Home Maintenance", icon: PaintBucket},
+    { value: "tithe", label: "Tithe", icon: HeartHandshake}
+
 ]
 
 export function ExpenseForm({ onSubmit, onCancel }: ExpenseFormProps) {

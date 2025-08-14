@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 //icons
-import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard } from "lucide-react"
+import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard, HeartHandshake } from "lucide-react"
 
 interface Expense {
   id: string
@@ -29,7 +29,8 @@ const categoryIcons = {
   health: Heart,
   education: GraduationCap,
   subscriptions: DollarSign,
-  home: PaintBucket
+  home: PaintBucket,
+  tithe: HeartHandshake
 }
 
 const categoryLabels = {
@@ -43,7 +44,8 @@ const categoryLabels = {
   health: "Health & Fitness",
   education: "Education",
   subscriptions: "Subscriptions",
-  home: "Home Maintenance"
+  home: "Home Maintenance",
+  tithe: "Tithe"
 }
 
 export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
