@@ -93,17 +93,16 @@ export default function BudgetApp() {
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
   const totalSavings = savings.reduce((sum, saving) => sum + saving.amount, 0)
   const totalIncome = income.reduce((sum, inc) => sum + inc.amount, 0)
+  const remainingIncome = totalIncome - totalIncome
 
+  // TODO fix date
   const thisMonthExpenses = expenses
     .filter((expense) => {
       const date = new Date(expense.date)
-      const expenseDate = dateFormatter.format(date)
       const now = new Date()
-      return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear()
+      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()
     })
     .reduce((sum, expense) => sum + expense.amount, 0)
-
-  const remainingIncome = totalIncome - thisMonthExpenses
 
   if (isLoading) {
     return (
@@ -126,7 +125,7 @@ export default function BudgetApp() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Total Expenses</CardTitle>
@@ -137,28 +136,6 @@ export default function BudgetApp() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-0 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-sans font-medium text-gray-600">This Month</CardTitle>
-              <TrendingUp className="h-4 w-4 text-indigo-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(thisMonthExpenses)}</div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white border-0 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-sans font-medium text-gray-600">Transactions</CardTitle>
-              <TrendingUp className="h-4 w-4 text-indigo-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">{expenses.length}</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Monthly Income</CardTitle>

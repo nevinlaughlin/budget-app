@@ -80,8 +80,9 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
   return (
     <Card className="bg-white border-0 shadow-sm">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <CardTitle className="font-heading font-bold text-xl text-gray-900">Recent Expenses</CardTitle>
+          <CardTitle className="font-heading font-semibold text-md text-gray-400 mt-1 mr-auto">{expenses.length} transactions</CardTitle>
           {availableCategories.length > 0 && (
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-gray-500" />
