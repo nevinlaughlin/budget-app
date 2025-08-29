@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-//icons
-import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Gamepad2, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard, HeartHandshake } from "lucide-react"
+import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard, HeartHandshake, Filter } from "lucide-react"
+import { useState, useMemo } from "react"
 
 interface Expense {
   id: string
@@ -49,6 +49,19 @@ const categoryLabels = {
 }
 
 export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+
+  const filteredExpenses = useMemo(() => {
+    if (selectedCategory === "all") return expenses
+    return expenses.filter((expense) => expense.category === selectedCategory)
+  }, [expenses, selectedCategory])
+
+  const availableCategories = useMemo(() => {
+    const categories = Array.from(new Set(expenses.map((expense) => expense.category)))
+    return categories.sort()
+  }, [expenses])
+
   if (expenses.length === 0) {
     return (
       <Card className="bg-white border-0 shadow-sm">
@@ -66,13 +79,41 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
   return (
     <Card className="bg-white border-0 shadow-sm">
       <CardHeader>
-        <CardTitle className="font-heading font-bold text-xl text-gray-900">Recent Expenses</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="font-heading font-bold text-xl text-gray-900">Recent Expenses</CardTitle>
+          {availableCategories.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-gray-500" />
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="text-sm border border-gray-200 rounded-md px-2 py-1 bg-white font-sans"
+              >
+                <option value="all">All Categories</option>
+                {availableCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {categoryLabels[category as keyof typeof categoryLabels] || category}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {expenses.map((expense) => {
+          {filteredExpenses.map((expense) => {
+
             const Icon = categoryIcons[expense.category as keyof typeof categoryIcons] || Utensils
             const categoryLabel = categoryLabels[expense.category as keyof typeof categoryLabels] || expense.category
+
+            const date = new Date(expense.date);
+            const formatter = new Intl.DateTimeFormat('en-US', {
+              timeZone: 'UTC', // Ensure consistent formatting regardless of user's timezone
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+            })
 
             return (
               <div
@@ -88,7 +129,7 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
                     {expense.description && (
                       <div className="text-sm text-gray-600 font-sans">{expense.description}</div>
                     )}
-                    <div className="text-xs text-gray-500 font-sans">{new Date(expense.date).toLocaleDateString()}</div>
+                    <div className="text-xs text-gray-500 font-sans">{formatter.format(date)}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -106,6 +147,14 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
             )
           })}
         </div>
+        {filteredExpenses.length === 0 && expenses.length > 0 && (
+          <div className="text-center py-8">
+            <div className="text-gray-400 mb-2">
+              <Filter className="h-8 w-8 mx-auto" />
+            </div>
+            <p className="text-gray-600 font-sans">No expenses found for this category</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

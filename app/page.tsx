@@ -132,7 +132,7 @@ export default function BudgetApp() {
               <DollarSign className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${totalExpenses.toLocaleString("en-US")}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(totalExpenses)}</div>
             </CardContent>
           </Card>
 
@@ -142,7 +142,7 @@ export default function BudgetApp() {
               <TrendingUp className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${thisMonthExpenses.toLocaleString("en-US")}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(thisMonthExpenses)}</div>
             </CardContent>
           </Card>
 
@@ -164,7 +164,7 @@ export default function BudgetApp() {
                 <Wallet className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(totalIncome)}</div>
+              <div className="text-2xl font-heading font-black text-blue-500">{currencyFormatter.format(totalIncome)}</div>
             </CardContent>
           </Card>
 
@@ -174,7 +174,7 @@ export default function BudgetApp() {
               <TrendingDown className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${remainingIncome.toLocaleString("en-US")}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(remainingIncome)}</div>
             </CardContent>
           </Card>
 
