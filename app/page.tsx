@@ -10,7 +10,7 @@ import { SavingsForm } from "@/components/savings-form"
 import { IncomeForm } from "@/components/income-form" 
 import { Plus, TrendingDown, TrendingUp, DollarSign, PiggyBank, Wallet } from "lucide-react"
 import { expenseDB, type Expense, type Savings, type Income } from "@/lib/indexeddb" 
-import { currencyFormatter } from "@/lib/utils"
+import { currencyFormatter, dateFormatter } from "@/lib/utils"
 
 export default function BudgetApp() {
   const [expenses, setExpenses] = useState<Expense[]>([])
@@ -96,7 +96,8 @@ export default function BudgetApp() {
 
   const thisMonthExpenses = expenses
     .filter((expense) => {
-      const expenseDate = new Date(expense.date)
+      const date = new Date(expense.date)
+      const expenseDate = dateFormatter.format(date)
       const now = new Date()
       return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear()
     })

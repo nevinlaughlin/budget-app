@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Trash2, ShoppingCart, Car, Home, Utensils, Coffee, Heart, GraduationCap, DollarSign, HandPlatter, PaintBucket, Clapperboard, HeartHandshake, Filter } from "lucide-react"
 import { useState, useMemo } from "react"
+import { currencyFormatter, dateFormatter } from "@/lib/utils"
 
 interface Expense {
   id: string
@@ -106,14 +107,7 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
 
             const Icon = categoryIcons[expense.category as keyof typeof categoryIcons] || Utensils
             const categoryLabel = categoryLabels[expense.category as keyof typeof categoryLabels] || expense.category
-
             const date = new Date(expense.date);
-            const formatter = new Intl.DateTimeFormat('en-US', {
-              timeZone: 'UTC', // Ensure consistent formatting regardless of user's timezone
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric',
-            })
 
             return (
               <div
@@ -129,11 +123,11 @@ export function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
                     {expense.description && (
                       <div className="text-sm text-gray-600 font-sans">{expense.description}</div>
                     )}
-                    <div className="text-xs text-gray-500 font-sans">{formatter.format(date)}</div>
+                    <div className="text-xs text-gray-500 font-sans">{dateFormatter.format(date)}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="font-heading font-bold text-lg text-gray-900">${expense.amount.toLocaleString("en-US")}</div>
+                  <div className="font-heading font-bold text-lg text-gray-900">{currencyFormatter.format(expense.amount)}</div>
                   <Button
                     variant="ghost"
                     size="sm"
