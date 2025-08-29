@@ -1,35 +1,45 @@
 "use client"
 
 import { useState, useEffect } from "react"
-//components
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CategoryChart } from "@/components/category-chart"
 import { ExpenseForm } from "@/components/expense-form"
 import { ExpenseList } from "@/components/expense-list"
-import { CategoryChart } from "@/components/category-chart"
-//icons
-import { Plus, TrendingDown, TrendingUp, DollarSign } from "lucide-react"
-import { expenseDB, type Expense } from "@/lib/indexeddb"
+import { SavingsForm } from "@/components/savings-form"
+import { IncomeForm } from "@/components/income-form" 
+import { Plus, TrendingDown, TrendingUp, DollarSign, PiggyBank, Wallet } from "lucide-react"
+import { expenseDB, type Expense, type Savings, type Income } from "@/lib/indexeddb" 
+import { currencyFormatter } from "@/lib/utils"
 
 export default function BudgetApp() {
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
+  const [income, setIncome] = useState<Income[]>([]) // Added income state
   const [isLoading, setIsLoading] = useState(true)
-
+  const [savings, setSavings] = useState<Savings[]>([])
+  const [showSavingsForm, setShowSavingsForm] = useState(false)
+  const [showIncomeForm, setShowIncomeForm] = useState(false) // Added income form state
 
   useEffect(() => {
-    const loadExpenses = async () => {
+    const loadData = async () => {
       try {
-        const savedExpenses = await expenseDB.getAllExpenses()
+        const [savedExpenses, savedSavings, savedIncome] = await Promise.all([
+          expenseDB.getAllExpenses(),
+          expenseDB.getAllSavings(),
+          expenseDB.getAllIncome(),
+        ])
         setExpenses(savedExpenses)
+        setSavings(savedSavings)
+        setIncome(savedIncome) // Set income state
       } catch (error) {
-        console.error("Failed to load expenses:", error)
+        console.error("Failed to load data:", error)
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadExpenses()
+    loadData()
   }, [])
 
   const addExpense = async (expense: Omit<Expense, "id">) => {
@@ -56,8 +66,33 @@ export default function BudgetApp() {
     }
   }
 
-  const totalIncome = (3613.38 * 2) + (1579 * 2)
+  const addSavings = async (amount: number, description: string) => {
+    try {
+      await expenseDB.updateSavings(amount, description)
+      // Reload savings to get updated record
+      const updatedSavings = await expenseDB.getAllSavings()
+      setSavings(updatedSavings)
+      setShowSavingsForm(false)
+    } catch (error) {
+      console.error("Failed to update savings:", error)
+    }
+  }
+
+  const addIncome = async (amount: number, description: string) => {
+    try {
+      await expenseDB.updateIncome(amount, description)
+      // Reload income to get updated record
+      const updatedIncome = await expenseDB.getAllIncome()
+      setIncome(updatedIncome)
+      setShowIncomeForm(false)
+    } catch (error) {
+      console.error("Failed to update income:", error)
+    }
+  }
+
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
+  const totalSavings = savings.reduce((sum, saving) => sum + saving.amount, 0)
+  const totalIncome = income.reduce((sum, inc) => sum + inc.amount, 0)
 
   const thisMonthExpenses = expenses
     .filter((expense) => {
@@ -67,8 +102,7 @@ export default function BudgetApp() {
     })
     .reduce((sum, expense) => sum + expense.amount, 0)
 
-    const remainingIncome = totalIncome - thisMonthExpenses
-
+  const remainingIncome = totalIncome - thisMonthExpenses
 
   if (isLoading) {
     return (
@@ -115,7 +149,7 @@ export default function BudgetApp() {
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Transactions</CardTitle>
-              <TrendingDown className="h-4 w-4 text-indigo-500" />
+              <TrendingUp className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-heading font-black text-gray-900">{expenses.length}</div>
@@ -127,17 +161,17 @@ export default function BudgetApp() {
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Monthly Income</CardTitle>
-              <DollarSign className="h-4 w-4 text-indigo-500" />
+                <Wallet className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-heading font-black text-gray-900">${totalIncome.toLocaleString("en-US")}</div>
+              <div className="text-2xl font-heading font-black text-gray-900">{currencyFormatter.format(totalIncome)}</div>
             </CardContent>
           </Card>
 
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-sans font-medium text-gray-600">Remaining Income</CardTitle>
-              <TrendingUp className="h-4 w-4 text-indigo-500" />
+              <TrendingDown className="h-4 w-4 text-indigo-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-heading font-black text-gray-900">${remainingIncome.toLocaleString("en-US")}</div>
@@ -146,10 +180,11 @@ export default function BudgetApp() {
 
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-sans font-medium text-gray-600"></CardTitle>
-              <TrendingDown className="h-4 w-4 text-indigo-500" />
+              <CardTitle className="text-sm font-sans font-medium text-gray-600">Savings</CardTitle>
+              <PiggyBank className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
+              <div className="text-2xl font-heading font-black text-green-600">{currencyFormatter.format(totalSavings)}</div>
             </CardContent>
           </Card>
         </div>
@@ -157,23 +192,52 @@ export default function BudgetApp() {
         {/* Chart and Add Expense */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CategoryChart expenses={expenses} />
-
           <Card className="bg-white border-0 shadow-sm">
             <CardHeader>
               <CardTitle className="font-heading font-bold text-xl text-gray-900">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {!showAddForm ? (
-                <Button
-                  onClick={() => setShowAddForm(true)}
-                  className="w-full bg-blue-700 hover:bg-blue-600 text-white font-sans font-medium"
-                  size="lg"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Expense
-                </Button>
-              ) : (
+              {!showAddForm && !showSavingsForm && !showIncomeForm ? (
+                <>
+                  <Button
+                    onClick={() => setShowAddForm(true)}
+                    className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-sans font-medium"
+                    size="lg"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Expense
+                  </Button>
+                  <Button
+                    onClick={() => setShowIncomeForm(true)}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-sans font-medium"
+                    size="lg"
+                  >
+                    <Wallet className="mr-2 h-4 w-4" />
+                    Add Income
+                  </Button>
+                  <Button
+                    onClick={() => setShowSavingsForm(true)}
+                    className="w-full bg-green-500 hover:bg-green-600 text-white font-sans font-medium"
+                    size="lg"
+                  >
+                    <PiggyBank className="mr-2 h-4 w-4" />
+                    Add Savings
+                  </Button>
+                </>
+              ) : showAddForm ? (
                 <ExpenseForm onSubmit={addExpense} onCancel={() => setShowAddForm(false)} />
+              ) : showIncomeForm ? (
+                <IncomeForm
+                  onSubmit={addIncome}
+                  onCancel={() => setShowIncomeForm(false)}
+                  currentIncome={totalIncome}
+                />
+              ) : (
+                <SavingsForm
+                  onSubmit={addSavings}
+                  onCancel={() => setShowSavingsForm(false)}
+                  currentSavings={totalSavings}
+                />
               )}
             </CardContent>
           </Card>

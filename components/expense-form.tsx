@@ -28,7 +28,7 @@ const categories = [
   { value: "education", label: "Education", icon: GraduationCap },
   { value: "subscriptions", label: "Subscriptions", icon: DollarSign },
   { value: "home", label: "Home Maintenance", icon: PaintBucket},
-    { value: "tithe", label: "Tithe", icon: HeartHandshake}
+  { value: "tithe", label: "Tithe", icon: HeartHandshake}
 
 ]
 
